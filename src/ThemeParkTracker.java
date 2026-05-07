@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 
-public class ThemeParkTracker {
+public class Tracker {
 
     private ArrayList<Ride> rides;
 
-    public ThemeParkTracker() {
+    public Tracker() {
         rides = new ArrayList<>();
     }
 
     public void addRide(Ride ride) {
-        rides.set(rides.size(), ride);
+        rides.add(ride);
     }
 
     public Ride getRide(int index) {
@@ -21,16 +21,19 @@ public class ThemeParkTracker {
     }
 
     public void removeClosedRides() {
+        ArrayList<Ride> temp = new ArrayList<>();
+
         for (int i = 0; i < rides.size(); i++) {
-            if (rides.get(i).getStatus() == "closed") {
-                rides.remove(i);
+            if (rides.get(i).getStatus().equals("open")) {
+                temp.add(rides.get(i));
             }
         }
+        rides = temp;
     }
 
     public void printRide(String name) {
         for (Ride ride : rides) {
-            if (ride.getName() == name) {
+            if (ride.getName().equals(name)) {
                 System.out.println(ride);
             }
         }
@@ -43,24 +46,18 @@ public class ThemeParkTracker {
     }
 
     public void printAllRides() {
-        for (int i = 0; i < rides.size() - 1; i++) {
+        for (int i = 0; i < rides.size(); i++) {
             System.out.println(rides.get(i));
         }
     }
 
     public void sortByWaitTime() {
-
-        for (int i = 0; i < rides.size(); i++) {
-
-            for (int j = i + 1; j < rides.size(); j++) {
-
-                if (rides.get(i).getWaitTime() > rides.get(j).getWaitTime()) {
-
-                    int temp = rides.get(i).getWaitTime();
-
-                    rides.get(i).setWaitTime(rides.get(j).getWaitTime());
-
-                    rides.get(j).setWaitTime(temp);
+        for (int i = 0; i < rides.size()-1; i++) {
+            for (int j = 0; j < rides.size()-i-1; j++) {
+                if (rides.get(j).getWaitTime() > rides.get(j+1).getWaitTime()) {
+                    Ride temp = rides.get(j);
+                    rides.set(j,rides.get(j+1));
+                    rides.set(j+1,temp);
                 }
             }
         }
@@ -68,13 +65,9 @@ public class ThemeParkTracker {
 
     public String findRideStatus(String rideName) {
 
-        for (Ride ride : rides) {
-
-            if (ride.getName() == rideName) {
-                return ride.getStatus();
-            } else {
-                return "Ride not found";
-            }
+        for (int x = 0; x< rides.size(); x++) {
+            if (rideName.equals(rides.get(x).getName()))
+                return rides.get(x).getStatus();
         }
 
         return "No rides in tracker";
